@@ -1,4 +1,27 @@
+import json
+
 students = []
+
+# LOAD DATA FROM FILE
+def load_data():
+
+    global students
+
+    try:
+        with open("students.json", "r") as file:
+            students = json.load(file)
+
+    except FileNotFoundError:
+        students = []
+
+# SAVE DATA TO FILE
+def save_data():
+
+    with open("students.json", "w") as file:
+        json.dump(students, file, indent=4)
+
+# LOAD OLD DATA WHEN PROGRAM STARTS
+load_data()
 
 while True:
 
@@ -26,6 +49,9 @@ while True:
         }
 
         students.append(student)
+
+        # SAVE AFTER ADD
+        save_data()
 
         print("Student added successfully!")
 
@@ -79,6 +105,9 @@ while True:
 
                 students.remove(s)
 
+                # SAVE AFTER DELETE
+                save_data()
+
                 print("Student deleted successfully!")
 
                 found = True
@@ -115,7 +144,7 @@ while True:
                 new_roll = input("Enter new roll number (press enter to skip): ")
                 new_branch = input("Enter new branch (press enter to skip): ")
 
-                # EMPTY VALIDATION + SKIP OPTION
+                # UPDATE ONLY IF INPUT IS NOT EMPTY
                 if new_name != "":
                     s["name"] = new_name
 
@@ -129,6 +158,9 @@ while True:
                 confirm = input("\nConfirm update? (y/n): ")
 
                 if confirm.lower() == "y":
+
+                    # SAVE AFTER UPDATE
+                    save_data()
 
                     print("\nStudent updated successfully!")
 
@@ -151,4 +183,5 @@ while True:
         break
 
     else:
+
         print("Invalid choice.")
